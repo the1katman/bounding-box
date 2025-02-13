@@ -1,0 +1,70 @@
+plugins {
+    id 'application'
+}
+
+group = 'com.the1katman'
+
+java {
+    def javaVersion = JavaVersion.VERSION_21
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
+
+compileJava {
+    // encoding
+    options.encoding = 'UTF-8'
+
+    // forking
+    options.fork = true
+
+    // linting
+    options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+
+    // use sun classes with javac
+    options.compilerArgs << '-XDignore.symbol.file'
+}
+
+application {
+    mainClass = 'com.the1katman.BoundingBoxApp'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    // slf4j
+    slf4j_version = '2.0.16'
+
+    // logback
+    logback_version = '1.5.8'
+
+    // assertj
+    assertj_version = '3.27.3'
+
+    // testng
+    testng_version = '7.10.2'
+
+    // test suite
+    default_test_suite = 'src/test/resources/testng.xml'
+}
+
+dependencies {
+    // slf4j
+    testImplementation group: 'org.slf4j', name: 'slf4j-api', version: slf4j_version
+
+    // logback
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: logback_version
+
+    // assertj
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
+
+    // testng
+    testImplementation group: 'org.testng', name: 'testng', version: testng_version
+}
+
+test {
+    useTestNG {
+        suites default_test_suite
+    }
+}
