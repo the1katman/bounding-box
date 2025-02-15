@@ -2,8 +2,6 @@ plugins {
     id 'application'
 }
 
-group = 'com.the1katman'
-
 java {
     def javaVersion = JavaVersion.VERSION_21
     sourceCompatibility = javaVersion
@@ -51,10 +49,10 @@ ext {
 
 dependencies {
     // slf4j
-    testImplementation group: 'org.slf4j', name: 'slf4j-api', version: slf4j_version
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: slf4j_version
 
     // logback
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: logback_version
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: logback_version
 
     // assertj
     testImplementation group: 'org.assertj', name: 'assertj-core', version: assertj_version
@@ -65,6 +63,28 @@ dependencies {
 
 test {
     useTestNG {
+        // enable TestNG reporting
+        useDefaultListeners = true
+
         suites default_test_suite
     }
+
+    scanForTestClasses = false
+
+    // prevent Gradle from overwriting the TestNG html report
+    reports.html.required = false
+
+    testLogging {
+        // set options for log level LIFECYCLE
+        events 'failed'
+        exceptionFormat = 'short'
+
+        // set options for log level DEBUG
+        debug {
+            events 'started', 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            exceptionFormat = 'full'
+        }
+    }
+
+    failFast = true
 }
